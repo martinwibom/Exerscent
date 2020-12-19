@@ -32,11 +32,13 @@ public class gameSystemLogic : MonoBehaviour {
 	public int totalFails = 0;
 	public int totalAttempts = 0;
 	public bool customLength = false;
-	public int gameLength = 3; 
+	public int gameLength = 0; 
 	public bool gameRunning = false;
+	public bool gridSelected = false;
+	public bool lengthSelected = false;
 	string elapsedTime;
 	//Size of scent grid
-	public Vector2 gridSize = new Vector2(3, 2);
+	public Vector2 gridSize = new Vector2(0, 0);
 	//Scent grid spacing
 	private Vector2 gridSpacing;
 	//List of current active scent objects
@@ -56,6 +58,8 @@ public class gameSystemLogic : MonoBehaviour {
 	public UIManager UIManager;
 	//Firebase reference
 	public FirebaseManager FirebaseManager;
+	//ScentBehaviour reference
+	public ScentBehaviour scentBehaviour;
 	//Data handler
 	public GameObject dataHandlingObj;     
 	//Player id
@@ -70,6 +74,7 @@ public class gameSystemLogic : MonoBehaviour {
 		setLength(GameObject.Find("LengthInput"));
 		scentGridRect = GameObject.Find("ScentGrid").GetComponent<RectTransform>();
 		gridLayout = GameObject.Find("ScentGrid").GetComponent<GridLayoutGroup>();
+		scentBehaviour = GameObject.FindObjectOfType<ScentBehaviour>();
 	}
 	
 	public void Update () {
@@ -98,8 +103,12 @@ public class gameSystemLogic : MonoBehaviour {
 		}
 
 		if(Input.GetKeyDown(KeyCode.L)) {
-			UIManager.updateUIState(UIState.enterLogin);
+			UIManager.updateUIState(UIState.selectGame);
 			playerName = "Martin_Test";
+			UIManager.admin.SetActive(true);
+			// scentBehaviour.debugFunc();
+			Debug.Log("This keycode is working");
+
 		}
 		
 		if(Input.GetKeyDown(KeyCode.K)) {
@@ -107,7 +116,9 @@ public class gameSystemLogic : MonoBehaviour {
 			exportFirebaseData();
 		}
 		if(Input.GetKeyDown(KeyCode.O)){
-			restart();
+			// restart();
+			Debug.Log(gridSize);
+			Debug.Log("This keycode is working");
 		}
 	}
 
@@ -328,17 +339,48 @@ public class gameSystemLogic : MonoBehaviour {
 		FirebaseManager.fetchData("Testplayer");
 	} 
 
+
     //Set custom game length
 	public void setLength(GameObject caller) {
 		Debug.Log("change!");
 		gameLength = int.Parse(caller.GetComponent<TMP_InputField>().text);
+		
+		if(gameLength > 0)
+		{
+			UIManager.changeColourRed(caller.transform.GetChild(0).Find("Text").gameObject);
+			lengthSelected = true;
+			
+			if(gridSelected)
+			{
+				//Change colour of Continue
+				UIManager.changeColourRed(UIManager.continueBTN);
+			}
+
+		} else if (gameLength == 0) {
+
+			UIManager.changeColourBlue(caller.transform.GetChild(0).Find("Text").gameObject);
+			lengthSelected = false;
+
+			if(gridSelected)
+			{
+				//Change colour of Continue
+				UIManager.changeColourBlue(UIManager.continueBTN);
+			}
+		}
 		//gameLength = int.Parse(entry.text);
+	}
+
+	public void setCardSpeed(GameObject caller){
+		scentBehaviour.cardSpeed = float.Parse(caller.GetComponent<TMP_InputField>().text);
 	}
 
 	public void tenOptions(){
 		//Changes the gridSize to 5, allowing 10 options to appear
 			gridSize.x = 5;
-			Debug.Log("Changed to bigger grid.");
+			gridSize.y = 2;
+			//Sets to two rows instead of one
+			gridLayout.constraintCount = 2;
+			Debug.Log("Changed to 10 optins per smell.");
 
 			//Changes the starting point of the grid, fitting all the cards onto the screen
 			scentGridRect.localPosition = new Vector3(-662, -63, 0);
@@ -350,7 +392,10 @@ public class gameSystemLogic : MonoBehaviour {
 	public void sixOptions(){
 		//Changes the gridSize to 3, allowing 6 options to appear
 			gridSize.x = 3;
-			Debug.Log("Changed to lessen grid.");
+			gridSize.y = 2;
+			gridLayout.constraintCount = 2;
+			//Set to two rows instead of one
+			Debug.Log("Changed to 6 options per smell.");
 
 			//Changes the starting point of the grid, original value
 			scentGridRect.localPosition = new Vector3(-331, -63, 0);
@@ -359,6 +404,20 @@ public class gameSystemLogic : MonoBehaviour {
 			gridLayout.spacing = new Vector2(60, 160);
 	}
 
+	public void twoOptions(){
+		//Changes the gridSize to 1, allowing 2 options to appear
+			gridSize.x = 2;
+			gridSize.y = 1;
+			//Set to one row instead of two
+			gridLayout.constraintCount = 1;
+			Debug.Log("Changed to 2 options per smell.");
+
+			//Changes the starting point of the grid, original value
+			scentGridRect.localPosition = new Vector3(-360, -63, 0);
+
+			//Changes the padding between the cards, original value
+			gridLayout.spacing = new Vector2(300, 160);
+	}
 
 	//Record elapsed game time. Might be broken?
 	public IEnumerator counter() {

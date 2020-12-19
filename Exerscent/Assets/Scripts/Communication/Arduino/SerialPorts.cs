@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;//.Ports;
 
+
 public class SerialPorts : MonoBehaviour {
 
 	// Use this for initialization
 	public string[] ports;
 	string portName;
 	string wantedPortName="usbmodem";
+	string wantedPortNameWindows="COM";
 	string fullPortName;
 	public bool portFound=false;
 
@@ -65,18 +67,36 @@ public class SerialPorts : MonoBehaviour {
 
 				}
 			}
-		} else {
-		
-			// Windows code
-			//brukar heta com1, com2 osv.
+		} else if (p == 2) {
 
-		
+			Debug.Log("Windows OS running");
+
+			// Get a list of serial port names.
+            string[] ports = SerialPort.GetPortNames();
+
+            Debug.Log("The following serial ports were found:");
+
+            // Display each port name to the console.
+            foreach(string port in ports)
+            {
+                Debug.Log(port);
+				if(port.Contains (wantedPortNameWindows))
+				{
+					Debug.Log("Port was found for windows");
+
+					this.gameObject.GetComponent<SerialCom>().setPort(port);
+					portFound = true;
+					CancelInvoke();
+				}
+            }		
 		}
 
 		if(portFound==false){
 			
 			//Should later use UI instead of print() to let user know the usb has not been inserted
 		//print ("Please make sure you have inserted the scent platform");
+		Debug.Log("Port has not been found");
+		Debug.Log("OS version is " + p);
 
 		}
 

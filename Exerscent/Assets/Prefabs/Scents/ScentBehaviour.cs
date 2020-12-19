@@ -23,6 +23,8 @@ public class ScentBehaviour : MonoBehaviour {
 	bool right = false;
 	bool animating = false;
 	
+	public float cardSpeed = 1;
+
 	// Use this for initialization
 	void Start () {
 		//Reference to game manager
@@ -32,6 +34,11 @@ public class ScentBehaviour : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	//Debug function that other scripts can call to see if linking scripts are succesfull
+	public void debugFunc(){
+		Debug.Log("It's working.");
 	}
 
 	//Set parameters on spawn
@@ -82,7 +89,7 @@ public class ScentBehaviour : MonoBehaviour {
 	//Animate towards assigned grid position
 	public void animateIn(Vector3 destination, int speed) {
 		Sequence inSequence = DOTween.Sequence();
-		inSequence.Append(transform.DOJump(destination, 5, 1, 1f).SetEase(Ease.InOutSine));
+		inSequence.Append(transform.DOJump(destination, 5, 1, cardSpeed).SetEase(Ease.InOutSine));
 		inSequence.Insert(1f, transform.DOPunchPosition(new Vector3(20, 20, 20), .2f, 5, 1));
 		inSequence.Insert(1f, transform.DOPunchRotation(new Vector3(7, 7, 7), .15f, 5, 1));
 	}
@@ -90,7 +97,7 @@ public class ScentBehaviour : MonoBehaviour {
 	//Animate out of view
 	public void animateOut() {
 		Sequence outSequence = DOTween.Sequence();
-		outSequence.Append(transform.DOJump(new Vector3(300, 0, 10), 5, 1, .8f).SetEase(Ease.InOutSine));
+		outSequence.Append(transform.DOJump(new Vector3(300, 0, 10), 5, 1, 1.6f).SetEase(Ease.InOutSine));
 		outSequence.Insert(0, transform.DOScale(new Vector3(1, 1, 1), .15f).SetEase(Ease.InOutSine));
 	}
 

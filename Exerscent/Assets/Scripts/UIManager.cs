@@ -10,7 +10,8 @@ using TMPro;
 public enum UIState {
 	waitingForArduino,
 	loginMenu, 
-	enterLogin, 
+	enterLogin,
+	selectGame,
 	welcome, 
 	openMenu,
 	closeMenu,
@@ -24,7 +25,7 @@ public enum menuState {
 	close,
 	about,
 	exit,
-	admin,
+	settings,
 	quit
 };
 
@@ -38,7 +39,7 @@ public class UIManager : MonoBehaviour {
 	public GameObject canvas;
 	public Vector2 screenScaled;
 	public float transitionSpeed = 0.35f;
-	public float menuSpeed = .2f;
+	public float menuSpeed = .5f;
 	//References to UI elements
 	public GameObject title;
 	public GameObject menuButton;
@@ -46,18 +47,26 @@ public class UIManager : MonoBehaviour {
 	public GameObject realMainMenu;
 	public GameObject menuBackground;
 	public GameObject about;
-	public GameObject exitSession;
 	public GameObject admin;
+	public GameObject exitSession;
+	public GameObject settings;
 	public GameObject quit;
 	public GameObject aboutWindow;
-	public GameObject exitWindow;
 	public GameObject adminWindow;
+	public GameObject exitWindow;
+	public GameObject settingsWindow;
 	public GameObject quitWindow;
 	public GameObject restartWindow;
 	public GameObject scentsParent;
-	public GameObject welcomeScreen; 
+	public GameObject welcomeScreen;
+	public GameObject selectGameScreen;
+	public GameObject twoOptions; 
 	public GameObject sixOptions;
 	public GameObject tenOptions;
+	public GameObject selectTwo;
+	public GameObject selectSix;
+	public GameObject selectTen;
+	public GameObject continueBTN;
 	public GameObject playAgainButton;
 	public TextMeshProUGUI infoText;
 	public GameObject progressBar;
@@ -76,6 +85,7 @@ public class UIManager : MonoBehaviour {
 	public bool menuOpen = false;
 	bool aboutOpen = false;
 	bool adminOpen = false;
+	bool settingsOpen = false;
 	bool quitOpen = false;
 	bool restartOpen = false;
 	bool exitOpen = false;
@@ -87,8 +97,10 @@ public class UIManager : MonoBehaviour {
 		updateUIState(UIState.waitingForArduino);
 		DOTween.defaultEaseType = Ease.OutBack;
         //Set initial menu object positions
+		admin.SetActive(false);
 		aboutWindow.transform.localPosition = new Vector3(200, 700, 0);
 		quitWindow.transform.localPosition = new Vector3(200, 700, 0);
+		settingsWindow.transform.localPosition = new Vector3(200, 700, 0);
 		adminWindow.transform.localPosition = new Vector3(200, 700, 0);
 		restartWindow.transform.localPosition = new Vector3(200, 700, 0);
 		exitWindow.transform.localPosition = new Vector3(200, 700, 0);
@@ -100,7 +112,7 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	//Switch UI state and animate elements accordingly
@@ -117,6 +129,14 @@ public class UIManager : MonoBehaviour {
 				break;
 			case UIState.enterLogin:
 				StartCoroutine(enterWait());
+				break;
+				//The user selects between 2, 6, 10 options per smell
+			case UIState.selectGame:
+				// StartCoroutine(selectGameAdmin());
+				selectGameScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
+				StartCoroutine(switchInfoText("", true));
+				enterMain();	
+				welcomeScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
 				break;
                 //Show welcome screen
 			case UIState.welcome:
@@ -139,7 +159,7 @@ public class UIManager : MonoBehaviour {
 			case UIState.endGame:
 				Debug.Log(manager.allResults.Count);
 				Invoke("endGameScript", 4.5f);
-				//            *********NOW INSIDE A IEnumerator function instead *************
+				//            *********NOW INSIDE A FUNCTION BELOW INSTEAD *************
 				// float totalScore = manager.totalScore;
 				// float gameLength = manager.gameLength;
 				// float procent = (totalScore / gameLength) *100;
@@ -172,6 +192,7 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
+	//Displays different messages depending on what %score the player got during their session
 	public void endGameScript(){
 		float totalScore = manager.totalScore;
 		float gameLength = manager.gameLength;
@@ -186,7 +207,7 @@ public class UIManager : MonoBehaviour {
 		} else if(procent > 33 && procent < 66){
 			endScore.text = "You've completed the session. It seems like you could use a bit more practice. Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
 		} else if (procent > 66 && procent < 99) {
-			endScore.text = "You've completed the session. A few more days and you'll get them all! Your sore was "+ manager.totalScore + " out of " + manager.gameLength + ".";
+			endScore.text = "You've completed the session. A few more days and you'll get them all! Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
 		} else if (procent > 99){
 			endScore.text = "You've completed the session. You're an expert! Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
 		}
@@ -225,7 +246,7 @@ public class UIManager : MonoBehaviour {
 				break;
 			case "ExitSession":
 				break;
-			case "Admin":
+			case "Settings":
 				break;
 			case "Quit":
 				Application.Quit();
@@ -243,6 +264,19 @@ public class UIManager : MonoBehaviour {
 		enterSequence.Insert(1, title.transform.DOScale(new Vector3(.6f, .6f, .6f), 0.5f).SetEase(Ease.OutBack));
 		yield return enterSequence.WaitForCompletion();
 		StartCoroutine(switchInfoText("Place your tag on the reader to log in", true));
+	}
+
+	//"Animations" for selectGame state
+	public IEnumerator selectGameAdmin(){
+		Sequence selectSequence = DOTween.Sequence();
+		selectSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
+		selectSequence.Insert(1, title.transform.DOMove((new Vector3(GameObject.Find("TitleStop").transform.position.x, GameObject.Find("TitleStop").transform.position.y, GameObject.Find("TitleStop").transform.position.z)), 0.5f).SetEase(Ease.InOutBack));
+		selectSequence.Insert(1, title.transform.DOScale(new Vector3(.6f, .6f, .6f), 0.5f).SetEase(Ease.OutBack));
+		selectSequence.Append(title.GetComponentInChildren<Image>().DOFillAmount(1, 1f).SetEase(Ease.InSine));
+		yield return selectSequence.WaitForCompletion();
+		selectGameScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
+		StartCoroutine(switchInfoText("Select the amount of options per smell:", true));
+
 	}
 
 	public void showAbout() {
@@ -264,8 +298,28 @@ public class UIManager : MonoBehaviour {
 			adminWindow.transform.localPosition = new Vector3(200, 1000, 0);
 			Sequence adminSequence = DOTween.Sequence();
 			adminSequence.Append(adminWindow.transform.DOLocalMove(new Vector3(250,-100, 0), menuSpeed)).SetEase(Ease.InOutSine);
-			admin.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
+			// admin.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
 			admin.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
+		}		
+	}
+
+	public void hideAdmin() {
+		Sequence closeAdmin = DOTween.Sequence();
+		// admin.GetComponent<TextMeshProUGUI>().DOColor(new Color32(224, 175, 29, 255), .3f);
+		admin.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+		closeAdmin.Append(adminWindow.transform.DOLocalMove(new Vector3(200, -1000, 0), menuSpeed)).SetEase(Ease.InSine);
+		adminOpen = false;
+	}
+
+	public void showSettings() {
+		if(!settingsOpen) {
+			hideAll();
+			settingsOpen = true;
+			settingsWindow.transform.localPosition = new Vector3(200, 1000, 0);
+			Sequence settingsSequence = DOTween.Sequence();
+			settingsSequence.Append(settingsWindow.transform.DOLocalMove(new Vector3(250,-100, 0), menuSpeed)).SetEase(Ease.InOutSine);
+			settings.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
+			settings.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
 		}		
 	}
 
@@ -274,6 +328,7 @@ public class UIManager : MonoBehaviour {
 		closeAbout.Append(aboutWindow.transform.DOLocalMove(new Vector3(220, -1000, 0), menuSpeed)).SetEase(Ease.InOutSine);
 		about.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
 		about.GetComponent<TextMeshProUGUI>().DOColor(new Color32(223, 139, 25, 255), .3f);
+		aboutOpen = false;
 	}
 
 	public void showQuit() {
@@ -324,11 +379,11 @@ public class UIManager : MonoBehaviour {
 		exitOpen = false;
 	}
 
-	public void hideAdmin() {
-		Sequence closeAdmin = DOTween.Sequence();
-		admin.GetComponent<TextMeshProUGUI>().DOColor(new Color32(224, 175, 29, 255), .3f);
-		admin.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
-		closeAdmin.Append(adminWindow.transform.DOLocalMove(new Vector3(200, -1000, 0), menuSpeed)).SetEase(Ease.InSine);
+	public void hideSettings() {
+		Sequence closeSettings = DOTween.Sequence();
+		settings.GetComponent<TextMeshProUGUI>().DOColor(new Color32(224, 175, 29, 255), .3f);
+		settings.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+		closeSettings.Append(settingsWindow.transform.DOLocalMove(new Vector3(200, -1000, 0), menuSpeed)).SetEase(Ease.InSine);
 	}
 
 	public void hideAll() {
@@ -344,9 +399,15 @@ public class UIManager : MonoBehaviour {
 			hideRestart();
 			restartOpen = false;
 		}
-		if(adminOpen) {
-			hideAdmin();
-			adminOpen = false;
+		if(settingsOpen) {
+			hideSettings();
+			settingsOpen = false;
+		}
+		if(admin){
+			if(adminOpen){
+				hideAdmin();
+				adminOpen = false;
+			}
 		}
 		
 	}
@@ -416,24 +477,104 @@ public class UIManager : MonoBehaviour {
 			// caller.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
 			caller.transform.DOScale(new Vector3(1, 1, 1), .20f).SetEase(Ease.InOutSine);
 	}
-	//
+
+	//Old code that was used when GameSize was set in settings
 	public void updateGameSize(GameObject caller) {
 		if (caller == sixOptions){
 			Debug.Log("Six options clicked");
 			manager.sixOptions();
-			sixOptions.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
-			sixOptions.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
-			tenOptions.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
-			tenOptions.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
+			setTextColour(caller);
 		} else if (caller == tenOptions){
 			Debug.Log("Ten options clicked");
-			tenOptions.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
-			tenOptions.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
-			sixOptions.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
-			sixOptions.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
 			manager.tenOptions();
+			setTextColour(caller);
+		} else if (caller == twoOptions){
+			Debug.Log("Two options clicked");
+			manager.twoOptions();
+			setTextColour(caller);
 		}
 	}
+
+	//Use this function if you need to delay the change up updateUIState so animations got time to finish 
+	public IEnumerator delayedUIState(float time,UIState state)
+	{
+		yield return new WaitForSeconds(time);
+		Debug.Log("UIState was updated");
+		updateUIState(state);
+	}
+
+
+	//Continues button for the selectGameState
+	public void continueScript()
+	{
+		if(manager.lengthSelected && manager.gridSelected)
+		{
+			selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+			updateUIState(UIState.welcome);
+		}	
+	}
+	
+	//Changes the colour of select options text at SelectGame state of the game
+	public void setTextColour(GameObject caller){
+		selectTwo.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+		selectTwo.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
+
+		selectSix.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+		selectSix.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
+
+		selectTen.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+		selectTen.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
+
+		caller.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline | FontStyles.Bold;
+		caller.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
+	}
+	
+
+	//Changes callers text to red
+	public void changeColourRed(GameObject caller)
+	{
+		caller.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f);
+	}
+	
+	//Changes callers text to blue
+	public void changeColourBlue(GameObject caller)
+	{
+		caller.GetComponent<TextMeshProUGUI>().DOColor(new Color32(129, 186, 213, 255), .3f);
+		
+	}
+
+	//Used in selectGame state to select either 2 - 6 - 10 options per smell
+	public void selectGameSize(GameObject caller){
+		if (caller == selectTwo){
+			Debug.Log("Two options clicked");
+			manager.twoOptions();
+			setTextColour(caller);
+			manager.gridSelected = true;
+			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+			// updateUIState(UIState.welcome);
+		} else if (caller == selectSix){
+			Debug.Log("Six options clicked");
+			setTextColour(caller);
+			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+			// updateUIState(UIState.welcome);
+			manager.sixOptions();
+			manager.gridSelected = true;
+		} else if (caller == selectTen){
+			Debug.Log("Ten options clicked");
+			setTextColour(caller);
+			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+			// updateUIState(UIState.welcome);
+			manager.tenOptions();
+			manager.gridSelected = true;
+		}
+		
+		if(manager.lengthSelected)
+		{
+			changeColourRed(continueBTN);
+		}
+	}
+
+	//Restarts the current session
 	public void restartSession(GameObject caller){
 
 		//Hides the "Are you sure" question.
@@ -450,10 +591,12 @@ public class UIManager : MonoBehaviour {
 
 
 		//Returns the user to the waiting for scent screen
-		updateUIState(UIState.waitingForScent);
+		StartCoroutine(delayedUIState(1f, UIState.welcome));
 	}
 
-		public void exitSessionScript(){
+
+	//Exits the current sessions, bring the player back to selectGame state
+	public void exitSessionScript(){
 
 		//Hides the "Are you sure" question.
 		hideExit();
@@ -469,9 +612,15 @@ public class UIManager : MonoBehaviour {
 
 
 		//Returns the user to the waiting for scent screen
-		updateUIState(UIState.welcome);
+		StartCoroutine(delayedUIState(1f, UIState.selectGame));
+
+		//Resets continue button in gameSelect state
+		manager.gridSelected = false;
+		manager.lengthSelected = false;
 	}
 
+
+	//Shows up when the user has finished a session, if they would like to play another session with the same settings.
 	public void playAgain(GameObject caller){
 		
 		//Clears all the current data
@@ -481,7 +630,7 @@ public class UIManager : MonoBehaviour {
 		title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
 
 		//Returns the user to the waiting for scent screen
-		updateUIState(UIState.waitingForScent);
+		StartCoroutine(delayedUIState(1f, UIState.waitingForScent));
 
 		//Moves the "Play Again?" option out of the screen
 		caller.transform.DOLocalMove(new Vector3(-1427, -420, 0), transitionSpeed);

@@ -75,6 +75,10 @@ public class FirebaseManager : MonoBehaviour {
 				allOptions.Child("Option05").SetValueAsync(currentSet.options[4]);
 				allOptions.Child("Option06").SetValueAsync(currentSet.options[5]);
 				resultIndex ++;
+			} else if (manager.gridSize.x == 2){
+				allOptions.Child("Option01").SetValueAsync(currentSet.options[0]);
+				allOptions.Child("Option02").SetValueAsync(currentSet.options[1]);
+				resultIndex ++;
 			}
 		}
 	}

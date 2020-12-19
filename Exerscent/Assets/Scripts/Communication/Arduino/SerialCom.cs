@@ -85,7 +85,7 @@ public class SerialCom : MonoBehaviour {
 						//Send scent name to game manager
 						if(gameManager.UIManager.currentState == UIState.enterLogin) {
 							gameManager.playerName = scentName;
-							gameManager.UIManager.updateUIState(UIState.welcome);
+							gameManager.UIManager.updateUIState(UIState.selectGame);
 						}				
 						//Debug.Log(gameManager.UIManager.currentState);
 						else if(gameManager.UIManager.currentState == UIState.waitingForScent || gameManager.UIManager.currentState == UIState.welcome) {
