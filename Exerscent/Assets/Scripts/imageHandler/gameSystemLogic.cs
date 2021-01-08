@@ -86,14 +86,14 @@ public class gameSystemLogic : MonoBehaviour {
 		// 	switchScent("");
 		// }
 	
-		if (Input.GetKeyUp(KeyCode.R))
-		{
-			switchScent("Lemon");
-		}	
-		if (Input.GetKeyUp(KeyCode.T))
-		{
-			switchScent("Apple");
-		}
+		// if (Input.GetKeyUp(KeyCode.R))
+		// {
+		// 	switchScent("Lemon");
+		// }	
+		// if (Input.GetKeyUp(KeyCode.T))
+		// {
+		// 	switchScent("Apple");
+		// }
 		// if(Input.GetKeyDown(KeyCode.Space)) {
 		// 	playerName = "Testplayer";
 		// 	UIManager.updateUIState(UIState.welcome);

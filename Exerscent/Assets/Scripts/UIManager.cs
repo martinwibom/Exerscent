@@ -158,7 +158,7 @@ public class UIManager : MonoBehaviour {
 				break;
 			case UIState.endGame:
 				Debug.Log(manager.allResults.Count);
-				Invoke("endGameScript", 4.5f);
+				Invoke("newEndGameScript", 4.5f);
 				break;
 			case UIState.openMenu:
 				Sequence openSequence = DOTween.Sequence();
@@ -192,6 +192,17 @@ public class UIManager : MonoBehaviour {
 			endScore.text = "You've completed the session. You're an expert! Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
 		}
 		Debug.Log("The player scored: " + procent + "%.");
+	}
+
+	public void newEndGameScript()
+	{
+		float totalScore = manager.totalScore;
+		float gameLength = manager.gameLength;
+		float procent = (totalScore / gameLength) *100;
+		endScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
+		TextMeshProUGUI endScore = GameObject.Find("EndText").GetComponent<TextMeshProUGUI>();
+		playAgainButton.transform.DOLocalMove(new Vector3(0, -290, 0), transitionSpeed);
+		endScore.text = "Session complete! Your score was " + manager.totalScore + " out of " + manager.gameLength + ".";
 	}
 
     //Only used for opening and closing menu, can probably safely delete the other cases
