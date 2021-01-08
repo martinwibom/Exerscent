@@ -68,6 +68,8 @@ public class gameSystemLogic : MonoBehaviour {
 	public RectTransform scentGridRect;
 	public GridLayoutGroup gridLayout;
 
+	public SerialCom SerialCom;
+
 
 	public void Start () {
         //Set game length on start
@@ -79,47 +81,43 @@ public class gameSystemLogic : MonoBehaviour {
 	
 	public void Update () {
 		//Fake scents and login with keyboard for debug purposes
-		if (Input.GetKeyUp(KeyCode.W))
-		{
-			switchScent("");
-		}
-		if (Input.GetKeyUp(KeyCode.E))
-		{
-			switchScent("Orange");
-		}
-
+		// if (Input.GetKeyUp(KeyCode.W))
+		// {
+		// 	switchScent("");
+		// }
+	
 		if (Input.GetKeyUp(KeyCode.R))
 		{
-			switchScent("Pine");
+			switchScent("Lemon");
 		}	
 		if (Input.GetKeyUp(KeyCode.T))
 		{
 			switchScent("Apple");
 		}
-		if(Input.GetKeyDown(KeyCode.Space)) {
-			playerName = "Testplayer";
-			UIManager.updateUIState(UIState.welcome);
-			gameRunning = true;
-		}
+		// if(Input.GetKeyDown(KeyCode.Space)) {
+		// 	playerName = "Testplayer";
+		// 	UIManager.updateUIState(UIState.welcome);
+		// 	gameRunning = true;
+		// }
 
-		if(Input.GetKeyDown(KeyCode.L)) {
-			UIManager.updateUIState(UIState.selectGame);
-			playerName = "Martin_Test";
-			UIManager.admin.SetActive(true);
-			// scentBehaviour.debugFunc();
-			Debug.Log("This keycode is working");
+		// if(Input.GetKeyDown(KeyCode.L)) {
+		// 	UIManager.updateUIState(UIState.selectGame);
+		// 	playerName = "Martin_Test";
+		// 	UIManager.admin.SetActive(true);
+		// 	// scentBehaviour.debugFunc();
+		// 	Debug.Log("This keycode is working");
 
-		}
+		// }
 		
-		if(Input.GetKeyDown(KeyCode.K)) {
-			//Run function that Debug.log Firebase data
-			exportFirebaseData();
-		}
-		if(Input.GetKeyDown(KeyCode.O)){
-			// restart();
-			Debug.Log(gridSize);
-			Debug.Log("This keycode is working");
-		}
+		// if(Input.GetKeyDown(KeyCode.K)) {
+		// 	//Run function that Debug.log Firebase data
+		// 	exportFirebaseData();
+		// }
+		// if(Input.GetKeyDown(KeyCode.O)){
+		// 	// restart();
+		// 	Debug.Log(gridSize);
+		// 	Debug.Log("This keycode is working");
+		// }
 	}
 
 	//Start a new round
@@ -286,13 +284,15 @@ public class gameSystemLogic : MonoBehaviour {
 					return;
 				}
 			}
+
             //Accept new scent if not identical to old one
 			if(scentName.ToLower() != correctScent.ToLower()) {
 				correctScent = scentName.ToLower();
 				StartCoroutine(newRound());
-				Debug.Log(scentName);
+				Debug.Log("switchScent recieved the variable " + scentName);
 				UIManager.updateUIState(UIState.waitingForAttempt);
 			}
+
 		}
 	}
 
@@ -327,6 +327,7 @@ public class gameSystemLogic : MonoBehaviour {
 		totalScore = 0;
 		totalFails = 0;
 		totalAttempts = 0;
+		correctScent = "";
 	}
 
     //Quit

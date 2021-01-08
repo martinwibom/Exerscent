@@ -159,26 +159,6 @@ public class UIManager : MonoBehaviour {
 			case UIState.endGame:
 				Debug.Log(manager.allResults.Count);
 				Invoke("endGameScript", 4.5f);
-				//            *********NOW INSIDE A FUNCTION BELOW INSTEAD *************
-				// float totalScore = manager.totalScore;
-				// float gameLength = manager.gameLength;
-				// float procent = (totalScore / gameLength) *100;
-				// endScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
-				// TextMeshProUGUI endScore = GameObject.Find("EndText").GetComponent<TextMeshProUGUI>();
-				// playAgainButton.transform.DOLocalMove(new Vector3(0, -290, 0), transitionSpeed);
-				// if(procent < 1){
-				// 	endScore.text = "You've completed the session. You should see a doctor. Your score was " + manager.totalScore + " out of " + manager.gameLength + ".";
-				// } else if(procent > 1 && procent < 33){
-				// 	endScore.text = "You've completed the session. Just getting started? Your score was " + manager.totalScore + " out of " + manager.gameLength + ".";
-				// } else if(procent > 33 && procent < 66){
-				// 	endScore.text = "You've completed the session. It seems like you could use a bit more practice. Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
-				// } else if (procent > 66 && procent < 99) {
-				// 	endScore.text = "You've completed the session. A few more days and you'll get them all! Your sore was "+ manager.totalScore + " out of " + manager.gameLength + ".";
-				// } else if (procent > 99){
-				// 	endScore.text = "You've completed the session. You're an expert! Your score was "+ manager.totalScore + " out of " + manager.gameLength + ".";
-				// }
-				// Debug.Log("The player scored: " + procent + "%.");
-				// endScore.text = "You’ve completed the session. Well done! " + manager.totalScore + " out of " + manager.gameLength + " scents were correctly identified in this session.";
 				break;
 			case UIState.openMenu:
 				Sequence openSequence = DOTween.Sequence();
@@ -468,13 +448,11 @@ public class UIManager : MonoBehaviour {
 
 	//Animate text on over
 	public void onPointerEnter (GameObject caller) {	
-		// caller.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
 		caller.transform.DOScale(new Vector3(1.13f, 1.13f, 1.13f), .17f).SetEase(Ease.InOutSine);
 	}
 
 	//Animate text on end hover
 	public void onPointerLeave (GameObject caller) {
-			// caller.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
 			caller.transform.DOScale(new Vector3(1, 1, 1), .20f).SetEase(Ease.InOutSine);
 	}
 
@@ -550,20 +528,14 @@ public class UIManager : MonoBehaviour {
 			manager.twoOptions();
 			setTextColour(caller);
 			manager.gridSelected = true;
-			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
-			// updateUIState(UIState.welcome);
 		} else if (caller == selectSix){
 			Debug.Log("Six options clicked");
 			setTextColour(caller);
-			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
-			// updateUIState(UIState.welcome);
 			manager.sixOptions();
 			manager.gridSelected = true;
 		} else if (caller == selectTen){
 			Debug.Log("Ten options clicked");
 			setTextColour(caller);
-			// selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
-			// updateUIState(UIState.welcome);
 			manager.tenOptions();
 			manager.gridSelected = true;
 		}
@@ -614,9 +586,7 @@ public class UIManager : MonoBehaviour {
 		//Returns the user to the waiting for scent screen
 		StartCoroutine(delayedUIState(1f, UIState.selectGame));
 
-		//Resets continue button in gameSelect state
-		manager.gridSelected = false;
-		manager.lengthSelected = false;
+
 	}
 
 

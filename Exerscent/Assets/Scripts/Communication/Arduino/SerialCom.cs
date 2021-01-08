@@ -31,7 +31,7 @@ public class SerialCom : MonoBehaviour {
 		portOpen = true;       
 		gameManager.UIManager.updateUIState(UIState.enterLogin);
 		StartCoroutine(ReadTwoStrings());
-		          //Bool to keep track of port state
+		//Bool to keep track of port state
 	}
 
 
@@ -54,7 +54,6 @@ public class SerialCom : MonoBehaviour {
 				//print (value2);
 
 				if (value2.Length > 0) {
-					Debug.Log(value2);
 					//assign scent type and scent name to string array
 					string[] inVals = value2.Split (','); //Split incoming string at comma (example string: "vegetable,carrot")
 
@@ -73,7 +72,7 @@ public class SerialCom : MonoBehaviour {
 							scentName = inVals [1];
 						} 
 						else scentName = inVals[0];
- */
+						*/
 						//Make sure the texts are treated as strings
 						//scentType=scentType.ToString();
 						scentName=scentName.ToString();
@@ -90,6 +89,7 @@ public class SerialCom : MonoBehaviour {
 						//Debug.Log(gameManager.UIManager.currentState);
 						else if(gameManager.UIManager.currentState == UIState.waitingForScent || gameManager.UIManager.currentState == UIState.welcome) {
 							gameManager.switchScent(scentName);
+							// Debug.Log("You scanned '" + scentName + "' to be used as the correct answer.");
 						}
 						
 
