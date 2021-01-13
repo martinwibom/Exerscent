@@ -60,6 +60,7 @@ public class UIManager : MonoBehaviour {
 	public GameObject scentsParent;
 	public GameObject welcomeScreen;
 	public GameObject selectGameScreen;
+	public GameObject logInScreen;
 	public GameObject twoOptions; 
 	public GameObject sixOptions;
 	public GameObject tenOptions;
@@ -67,7 +68,9 @@ public class UIManager : MonoBehaviour {
 	public GameObject selectSix;
 	public GameObject selectTen;
 	public GameObject continueBTN;
+	public GameObject continueLoginBTN;
 	public GameObject playAgainButton;
+	public GameObject nameInput;
 	public TextMeshProUGUI infoText;
 	public GameObject progressBar;
 	public bool windowOpen = false;
@@ -254,7 +257,9 @@ public class UIManager : MonoBehaviour {
 		enterSequence.Insert(1, title.transform.DOMove((new Vector3(GameObject.Find("TitleStop").transform.position.x, GameObject.Find("TitleStop").transform.position.y, GameObject.Find("TitleStop").transform.position.z)), 0.5f).SetEase(Ease.InOutBack));
 		enterSequence.Insert(1, title.transform.DOScale(new Vector3(.6f, .6f, .6f), 0.5f).SetEase(Ease.OutBack));
 		yield return enterSequence.WaitForCompletion();
-		StartCoroutine(switchInfoText("Place your tag on the reader to log in", true));
+		logInScreen.gameObject.transform.DOLocalMove(new Vector3(320, 0, 0), .3f).SetEase(Ease.InOutBack);
+
+		// StartCoroutine(switchInfoText("Place your tag on the reader to log in", true));
 	}
 
 	//"Animations" for selectGame state
@@ -496,11 +501,23 @@ public class UIManager : MonoBehaviour {
 	//Continues button for the selectGameState
 	public void continueScript()
 	{
-		if(manager.lengthSelected && manager.gridSelected)
+		if (currentState == UIState.enterLogin)
 		{
-			selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
-			updateUIState(UIState.welcome);
-		}	
+			if(manager.playerName != "")
+			{	
+				logInScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+				selectGameScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
+				updateUIState(UIState.selectGame);
+
+			}
+		}
+		if(currentState == UIState.selectGame){
+			if(manager.lengthSelected && manager.gridSelected)
+			{
+				selectGameScreen.transform.DOLocalMove(new Vector3(-1300, 0, 0), transitionSpeed);
+				updateUIState(UIState.welcome);
+			}
+		} 
 	}
 	
 	//Changes the colour of select options text at SelectGame state of the game

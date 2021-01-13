@@ -371,6 +371,20 @@ public class gameSystemLogic : MonoBehaviour {
 		//gameLength = int.Parse(entry.text);
 	}
 
+	public void setName ()
+	{
+		playerName = UIManager.nameInput.GetComponent<TMP_InputField>().text;
+
+		if(playerName != "")
+		{
+			UIManager.changeColourRed(UIManager.continueLoginBTN);
+		} else if (playerName == "")
+		{
+				UIManager.changeColourBlue(UIManager.continueLoginBTN);
+		}
+
+	}
+
 	public void setCardSpeed(GameObject caller){
 		scentBehaviour.cardSpeed = float.Parse(caller.GetComponent<TMP_InputField>().text);
 	}

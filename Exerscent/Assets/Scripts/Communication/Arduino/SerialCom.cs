@@ -81,13 +81,13 @@ public class SerialCom : MonoBehaviour {
 						//scentType=scentType.Trim(); 
 						scentName=scentName.Trim(); 
 						
-						//Send scent name to game manager
-						if(gameManager.UIManager.currentState == UIState.enterLogin) {
-							gameManager.playerName = scentName;
-							gameManager.UIManager.updateUIState(UIState.selectGame);
-						}				
+						// //Send scent name to game manager LEGACY FUNCTION
+						// if(gameManager.UIManager.currentState == UIState.enterLogin) {
+						// 	gameManager.playerName = scentName;
+						// 	gameManager.UIManager.updateUIState(UIState.selectGame);
+						// }				
 						//Debug.Log(gameManager.UIManager.currentState);
-						else if(gameManager.UIManager.currentState == UIState.waitingForScent || gameManager.UIManager.currentState == UIState.welcome) {
+						if(gameManager.UIManager.currentState == UIState.waitingForScent || gameManager.UIManager.currentState == UIState.welcome) {
 							gameManager.switchScent(scentName);
 							// Debug.Log("You scanned '" + scentName + "' to be used as the correct answer.");
 						}
