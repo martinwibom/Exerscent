@@ -10,9 +10,11 @@ public class SerialPorts : MonoBehaviour {
 	public string[] ports;
 	string portName;
 	string wantedPortName="usbmodem";
-	string wantedPortNameWindows="COM";
+	string wantedPortNameWindows="COM3";
 	string fullPortName;
 	public bool portFound=false;
+	public UIManager UIManager;
+	public int offerQuit = 0;
 
 
 	void Start () {
@@ -51,14 +53,22 @@ public class SerialPorts : MonoBehaviour {
 				//Debug.Log (System.String.Format (dev));  //Prints the name of the port in use
 
 				fullPortName = System.String.Format (dev);   //Save the name of the port in use to a string variable
-				portName = fullPortName;                     
+				portName = fullPortName; 
+				UIManager.consoleMessage("Port was found: " + portName);                   
 			
 				//Check if port name contains the string "usbmodem", as this is part of what virtual Arduino ports are named on Mac
 				if (fullPortName.Contains (wantedPortName)) {
 					print ("Choose this port: " + fullPortName);
+					UIManager.consoleMessage("The following port was selected: " + fullPortName);
 
 					this.gameObject.GetComponent<SerialCom> ().setPort (fullPortName);
 					portFound = true;
+
+					if(offerQuit==15)
+					{
+						UIManager.hideErrorMessage();
+					}
+
 					CancelInvoke(); //cancels Invoke repeating as port is found.
 
 
@@ -74,7 +84,7 @@ public class SerialPorts : MonoBehaviour {
 			// Get a list of serial port names.
             string[] ports = SerialPort.GetPortNames();
 
-            Debug.Log("The following serial ports were found:");
+            Debug.Log("The following serial ports were found:" + ports + ".");
 
             // Display each port name to the console.
             foreach(string port in ports)
@@ -83,9 +93,16 @@ public class SerialPorts : MonoBehaviour {
 				if(port.Contains (wantedPortNameWindows))
 				{
 					Debug.Log("Port was found for windows");
+					UIManager.consoleMessage("The following port was selected: " + port + ".");
 
 					this.gameObject.GetComponent<SerialCom>().setPort(port);
 					portFound = true;
+					
+					if(offerQuit==15)
+					{
+						UIManager.hideErrorMessage();
+					}
+
 					CancelInvoke();
 				}
             }		
@@ -94,13 +111,22 @@ public class SerialPorts : MonoBehaviour {
 		if(portFound==false){
 			
 			//Should later use UI instead of print() to let user know the usb has not been inserted
-		//print ("Please make sure you have inserted the scent platform");
-		Debug.Log("Port has not been found");
-		Debug.Log("OS version is " + p);
+			//print ("Please make sure you have inserted the scent platform");
+			Debug.Log("Port has not been found");
+			Debug.Log("OS version is " + p);
 
+
+			if(offerQuit == 15)
+			{
+				UIManager.showErrorMessage();
+				UIManager.consoleMessage("OS Version: " + p + ". No port was found.");
+			}
+
+			if(offerQuit < 15)
+			{
+				offerQuit++;
+			}
 		}
-
-
 
 	}
 }

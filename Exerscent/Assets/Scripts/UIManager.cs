@@ -40,6 +40,7 @@ public class UIManager : MonoBehaviour {
 	public Vector2 screenScaled;
 	public float transitionSpeed = 0.35f;
 	public float menuSpeed = .5f;
+	private bool consoleHidden = true;
 	//References to UI elements
 	public GameObject title;
 	public GameObject menuButton;
@@ -57,6 +58,8 @@ public class UIManager : MonoBehaviour {
 	public GameObject settingsWindow;
 	public GameObject quitWindow;
 	public GameObject restartWindow;
+	public GameObject consoleWindow;
+	public GameObject errorWindow;
 	public GameObject scentsParent;
 	public GameObject welcomeScreen;
 	public GameObject selectGameScreen;
@@ -67,6 +70,11 @@ public class UIManager : MonoBehaviour {
 	public GameObject selectTwo;
 	public GameObject selectSix;
 	public GameObject selectTen;
+	public GameObject firstMsg;
+	public GameObject secondMsg;
+	public GameObject thirdMsg;
+	public GameObject fourthMsg;
+	public GameObject quitText;
 	public GameObject continueBTN;
 	public GameObject continueLoginBTN;
 	public GameObject playAgainButton;
@@ -208,6 +216,24 @@ public class UIManager : MonoBehaviour {
 		endScore.text = "Session complete! Your score was " + manager.totalScore + " out of " + manager.gameLength + ".";
 	}
 
+	public void showErrorMessage()
+	{
+		errorWindow.transform.DOLocalMove(new Vector3(0, 82, 0), transitionSpeed);
+		quitOpen = true;
+		quitText.GetComponent<TextMeshProUGUI>().text = "Do you want to quit the game?";
+		Sequence quitSequence = DOTween.Sequence();
+		quitSequence.Append(quitWindow.transform.DOLocalMove(new Vector3(0, -158, 0), menuSpeed)).SetEase(Ease.InOutSine);
+	}
+
+	public void hideErrorMessage()
+	{
+		errorWindow.transform.DOLocalMove(new Vector3(0, 1000, 0), transitionSpeed);
+		quitOpen = false;
+		quitText.GetComponent<TextMeshProUGUI>().text = "Are you sure want to quit the game?";
+		Sequence quitSequence = DOTween.Sequence();
+		quitSequence.Append(quitWindow.transform.DOLocalMove(new Vector3(200, 1000, 0), menuSpeed)).SetEase(Ease.InOutSine);
+	}
+
     //Only used for opening and closing menu, can probably safely delete the other cases
 	public void updateMenuState(GameObject caller) {
 		Debug.Log(caller.name);
@@ -275,6 +301,27 @@ public class UIManager : MonoBehaviour {
 
 	}
 
+	public void toggleConsole()
+	{
+		if(consoleHidden)
+		{
+			consoleWindow.transform.localPosition = new Vector3(-133, 268, 0);
+			consoleHidden = false;
+		} else if(!consoleHidden){
+			consoleWindow.transform.localPosition = new Vector3(0, 1000, 0);
+			consoleHidden = true;
+		}
+	}
+	
+	public void consoleMessage(string newString)
+	{
+		fourthMsg.GetComponent<TextMeshProUGUI>().text = thirdMsg.GetComponent<TextMeshProUGUI>().text;
+		secondMsg.GetComponent<TextMeshProUGUI>().text = firstMsg.GetComponent<TextMeshProUGUI>().text;
+		thirdMsg.GetComponent<TextMeshProUGUI>().text = secondMsg.GetComponent<TextMeshProUGUI>().text;
+		firstMsg.GetComponent<TextMeshProUGUI>().text = newString;
+
+	}
+
 	public void showAbout() {
 		if(!aboutOpen) {
 			hideAll();
@@ -331,7 +378,7 @@ public class UIManager : MonoBehaviour {
 		if(!quitOpen) {
 			hideAll();
 			quitOpen = true;
-			quitWindow.transform.localPosition = new Vector3(200, 1000, 0);
+			// quitWindow.transform.localPosition = new Vector3(200, 1000, 0);
 			Sequence quitSequence = DOTween.Sequence();
 			quitSequence.Append(quitWindow.transform.DOLocalMove(new Vector3(200, 0, 0), menuSpeed)).SetEase(Ease.InOutSine);
 		}

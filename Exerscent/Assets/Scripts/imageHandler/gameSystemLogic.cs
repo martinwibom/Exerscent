@@ -85,6 +85,17 @@ public class gameSystemLogic : MonoBehaviour {
 		// {
 		// 	switchScent("");
 		// }
+
+		if (Input.GetKeyDown(KeyCode.K) && Input.GetKey(KeyCode.LeftControl))
+		{	
+			Debug.Log("Console toggled.");
+			UIManager.toggleConsole();
+		}
+
+		// if (Input.GetKeyDown(KeyCode.O))
+		// {
+		// 	UIManager.consoleMessage("This is a test message");
+		// }
 	
 		// if (Input.GetKeyUp(KeyCode.R))
 		// {

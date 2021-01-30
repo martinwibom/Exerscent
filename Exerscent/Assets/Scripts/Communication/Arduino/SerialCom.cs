@@ -80,6 +80,7 @@ public class SerialCom : MonoBehaviour {
 						//Trim the strings to get rid of spaces
 						//scentType=scentType.Trim(); 
 						scentName=scentName.Trim(); 
+						gameManager.UIManager.consoleMessage("The following tag was scanned: " + scentName + ".");
 						
 						// //Send scent name to game manager LEGACY FUNCTION
 						// if(gameManager.UIManager.currentState == UIState.enterLogin) {
