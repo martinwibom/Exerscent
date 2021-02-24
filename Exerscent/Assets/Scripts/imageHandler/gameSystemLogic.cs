@@ -288,6 +288,9 @@ public class gameSystemLogic : MonoBehaviour {
 		}
         //Check if UI is in correct state
 		if(gameRunning && UIManager.currentState != UIState.waitingForAttempt && UIManager.currentState != UIState.endGame) {
+			
+
+
 			//Check if scent has already been used
 			foreach(string usedScent in usedScents) {
 				if(usedScent == scentName) {
@@ -298,6 +301,7 @@ public class gameSystemLogic : MonoBehaviour {
 
             //Accept new scent if not identical to old one
 			if(scentName.ToLower() != correctScent.ToLower()) {
+
 				correctScent = scentName.ToLower();
 				StartCoroutine(newRound());
 				Debug.Log("switchScent recieved the variable " + scentName);

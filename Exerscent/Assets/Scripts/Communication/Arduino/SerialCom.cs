@@ -32,6 +32,7 @@ public class SerialCom : MonoBehaviour {
 		gameManager.UIManager.updateUIState(UIState.enterLogin);
 		StartCoroutine(ReadTwoStrings());
 		//Bool to keep track of port state
+		gameManager.UIManager.consoleMessage("SerialCom recieved " + portName + " as port.");
 	}
 
 
@@ -72,7 +73,7 @@ public class SerialCom : MonoBehaviour {
 							scentName = inVals [1];
 						} 
 						else scentName = inVals[0];
-						*/
+*/
 						//Make sure the texts are treated as strings
 						//scentType=scentType.ToString();
 						scentName=scentName.ToString();

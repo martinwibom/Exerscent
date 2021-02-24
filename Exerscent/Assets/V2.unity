@@ -7737,7 +7737,7 @@ MonoBehaviour:
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: de7dd8068a9e342bbb8da00d1958749c, type: 3}
     category: 1
-    name: Hawthorne
+    name: Hawthorn
     cardColor: {r: 0.85098046, g: 0.82745105, b: 0.64705884, a: 1}
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 59c70a70b9fcf465f9e32e2c880d83f7, type: 3}
@@ -7777,12 +7777,12 @@ MonoBehaviour:
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 671a175a711cc4e11b268982bb36e12f, type: 3}
     category: 1
-    name: Ceder
+    name: Cedar
     cardColor: {r: 0.31764707, g: 0.41960788, b: 0.28627452, a: 1}
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 84fc5711533c4414cb7f808af4495006, type: 3}
     category: 1
-    name: Liqourice
+    name: Liquorice
     cardColor: {r: 0.1509434, g: 0.1335534, b: 0.12317551, a: 1}
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 3818260203fe7483a8b8037b75228332, type: 3}
@@ -7965,7 +7965,7 @@ MonoBehaviour:
   secondMsg: {fileID: 319597637}
   thirdMsg: {fileID: 1779577967}
   fourthMsg: {fileID: 1250411968}
-  errorMsg: {fileID: 0}
+  quitText: {fileID: 0}
   continueBTN: {fileID: 364602802}
   continueLoginBTN: {fileID: 246896322}
   playAgainButton: {fileID: 214552969}
@@ -11488,7 +11488,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -82.70508, y: -413.52148}
+  m_AnchoredPosition: {x: -82.70506, y: -413.52148}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1128089735

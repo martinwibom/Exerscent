@@ -277,6 +277,7 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public IEnumerator enterWait() {
+		consoleMessage("Login window activated");
 		Sequence enterSequence = DOTween.Sequence();
 		enterSequence.Append(title.GetComponentInChildren<Image>().DOFillAmount(1, 1f).SetEase(Ease.InSine));
 		enterSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
