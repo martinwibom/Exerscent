@@ -482,8 +482,10 @@ public class UIManager : MonoBehaviour {
 
 	//Set welcome text and show old data
 	public void enterMain() {
+		//instance of the Menu
 		Sequence enterSequence = DOTween.Sequence();
 		enterSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
+		//Welcome text
 		WelcomeText.text = "Hello, " + manager.playerName.ToUpper() + "!";
 	}
 
@@ -629,7 +631,7 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
-	//Restarts the current session ------- This is not working?
+	//Restarts the current session
 	public void restartSession(GameObject caller){
 
 		//Hides the "Are you sure" question.

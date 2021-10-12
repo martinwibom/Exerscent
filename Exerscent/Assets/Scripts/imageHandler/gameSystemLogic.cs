@@ -97,10 +97,10 @@ public class gameSystemLogic : MonoBehaviour {
 		// 	UIManager.consoleMessage("This is a test message");
 		// }
 	
-		// if (Input.GetKeyUp(KeyCode.R))
-		// {
-		// 	switchScent("Lemon");
-		// }	
+		if (Input.GetKeyUp(KeyCode.R))
+		{
+			switchScent("Lemon");
+		}	
 		// if (Input.GetKeyUp(KeyCode.T))
 		// {
 		// 	switchScent("Apple");
