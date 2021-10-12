@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -135,10 +135,8 @@ public class UIManager : MonoBehaviour {
 				Sequence titleSequence = DOTween.Sequence();
 				titleSequence.Append(title.GetComponentInChildren<Image>().DOFillAmount(1, 10f).SetEase(Ease.InOutSine));
 				break;
-                //Login menu currently not used
-			case UIState.loginMenu:
-				break;
 			case UIState.enterLogin:
+			Debug.Log("I am waiting for a login");
 				StartCoroutine(enterWait());
 				break;
 				//The user selects between 2, 6, 10 options per smell
@@ -243,8 +241,10 @@ public class UIManager : MonoBehaviour {
 					menuOpen = true;
 					Debug.Log("opening");
 					Sequence openSequence = DOTween.Sequence();
-					openSequence.Append(mainMenu.transform.DOLocalMove(new Vector3(-570, 145, 0), menuSpeed)).SetEase(Ease.InOutSine);
+					//fade-in background when menu opens
 					openSequence.Insert(0, background.DOFade(1, menuSpeed));
+					//change menu position (about,restart,exit and quit text)
+					openSequence.Append(mainMenu.transform.DOLocalMove(new Vector3(-570, 200, 0), menuSpeed)).SetEase(Ease.InOutSine);
 					openSequence.Insert(0, menuButton.GetComponent<TextMeshProUGUI>().DOColor(new Color32(219, 69, 20, 255), .3f));
 					menuButton.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
 					background.raycastTarget = true;
@@ -261,27 +261,18 @@ public class UIManager : MonoBehaviour {
 					background.raycastTarget = false;
 				}
 				break;
-			case "About":
-				showAbout();
-				break;
-			case "ExitSession":
-				break;
-			case "Settings":
-				break;
-			case "Quit":
-				Application.Quit();
-				break;
-			default:
-				break;
 		}
 	}
 
 	public IEnumerator enterWait() {
 		consoleMessage("Login window activated");
 		Sequence enterSequence = DOTween.Sequence();
+		//loading bar progress
 		enterSequence.Append(title.GetComponentInChildren<Image>().DOFillAmount(1, 1f).SetEase(Ease.InSine));
-		enterSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
+		//instance of the menu
+		//enterSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
 		enterSequence.Insert(1, title.transform.DOMove((new Vector3(GameObject.Find("TitleStop").transform.position.x, GameObject.Find("TitleStop").transform.position.y, GameObject.Find("TitleStop").transform.position.z)), 0.5f).SetEase(Ease.InOutBack));
+		//loading bar position (+ layer) "exerscent"
 		enterSequence.Insert(1, title.transform.DOScale(new Vector3(.6f, .6f, .6f), 0.5f).SetEase(Ease.OutBack));
 		yield return enterSequence.WaitForCompletion();
 		logInScreen.gameObject.transform.DOLocalMove(new Vector3(320, 0, 0), .3f).SetEase(Ease.InOutBack);
@@ -323,7 +314,12 @@ public class UIManager : MonoBehaviour {
 
 	}
 
-	public void showAbout() {
+//=========================== CONCEAL/REVEAL MENU SELECTION ========================================
+// Series of functions that conceal or reveal the different menu selections so that they do not
+// overlap eachother.
+//==================================================================================================
+
+	public void showAbout() { //Show about section or about button??
 		if(!aboutOpen) {
 			hideAll();
 			aboutOpen = true;
@@ -368,6 +364,7 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public void hideAbout() {
+		Debug.Log("About was hidden");
 		Sequence closeAbout = DOTween.Sequence();
 		closeAbout.Append(aboutWindow.transform.DOLocalMove(new Vector3(220, -1000, 0), menuSpeed)).SetEase(Ease.InOutSine);
 		about.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
@@ -430,10 +427,15 @@ public class UIManager : MonoBehaviour {
 		closeSettings.Append(settingsWindow.transform.DOLocalMove(new Vector3(200, -1000, 0), menuSpeed)).SetEase(Ease.InSine);
 	}
 
+	// hideAll() calls the hide functions of each individual menu selection, to conceal the others
 	public void hideAll() {
 		if(aboutOpen) {
 			hideAbout();
 			aboutOpen = false;
+		}
+		if(exitOpen) {
+			hideExit();
+			exitOpen = false;
 		}
 		if(quitOpen) {
 			hideQuit();
@@ -458,6 +460,7 @@ public class UIManager : MonoBehaviour {
 
 	//public void toggleMenu
 	public void loginPressed() {
+		hideAll();
 		updateUIState(UIState.enterLogin);
 	}
 
@@ -465,6 +468,8 @@ public class UIManager : MonoBehaviour {
 	public void quitPressed() {
 		manager.quitGame();
 	}
+
+// ---------------------------------------------------------------------------------------------------
 
 	//Scale and change info text
 	public IEnumerator switchInfoText(string newText, bool reappear) {
@@ -477,6 +482,8 @@ public class UIManager : MonoBehaviour {
 
 	//Set welcome text and show old data
 	public void enterMain() {
+		Sequence enterSequence = DOTween.Sequence();
+		enterSequence.Append(menuButton.transform.DOLocalMove(new Vector3(-513, 324, 0), menuSpeed)).SetEase(Ease.InOutSine);
 		WelcomeText.text = "Hello, " + manager.playerName.ToUpper() + "!";
 	}
 
@@ -622,7 +629,7 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
-	//Restarts the current session
+	//Restarts the current session ------- This is not working?
 	public void restartSession(GameObject caller){
 
 		//Hides the "Are you sure" question.
