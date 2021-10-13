@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour {
 	public float transitionSpeed = 0.35f;
 	public float menuSpeed = .5f;
 	private bool consoleHidden = true;
+	public bool endScreen1 = false;
 	//References to UI elements
 	public GameObject title;
 	public GameObject menuButton;
@@ -183,6 +184,7 @@ public class UIManager : MonoBehaviour {
 
 	//Displays different messages depending on what %score the player got during their session
 	public void endGameScript(){
+		endScreen1 = true;
 		float totalScore = manager.totalScore;
 		float gameLength = manager.gameLength;
 		float procent = (totalScore / gameLength) *100;
@@ -205,6 +207,7 @@ public class UIManager : MonoBehaviour {
 
 	public void newEndGameScript()
 	{
+		endScreen1 = true;
 		float totalScore = manager.totalScore;
 		float gameLength = manager.gameLength;
 		float procent = (totalScore / gameLength) *100;
@@ -319,7 +322,7 @@ public class UIManager : MonoBehaviour {
 // overlap eachother.
 //==================================================================================================
 
-	public void showAbout() { //Show about section or about button??
+	public void showAbout() {
 		if(!aboutOpen) {
 			hideAll();
 			aboutOpen = true;
@@ -405,6 +408,19 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public void showExit() {
+		if (!manager.gameRunning && (currentState == UIState.selectGame)) {
+			hideExit();
+			selectGameScreen.transform.DOLocalMove(new Vector3(0, 0, 0), transitionSpeed);
+			updateUIState(UIState.selectGame);
+			//hideExit();
+		}
+
+		if(endScreen1) {
+			hideExit();
+			endScreen1 = false;
+			newEndGameScript();	
+		}
+
 		if(!exitOpen) {
 			hideAll();
 			exitOpen = true;
@@ -634,44 +650,47 @@ public class UIManager : MonoBehaviour {
 	//Restarts the current session
 	public void restartSession(GameObject caller){
 
-		//Hides the "Are you sure" question.
-		hideRestart();
+		if(manager.gameRunning) {
+			//Hides the "Are you sure" question.
+			hideRestart();
+			
+			//Clears all the current data and cards
+			manager.restart();
+
+			//Closes the menu
+			updateMenuState(menuButton);
+
+			//Resets the Exerscent logo
+			title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
+
+
+			//Returns the user to the waiting for scent screen
+			StartCoroutine(delayedUIState(1f, UIState.welcome));			
+		}
 		
-		//Clears all the current data and cards
-		manager.restart();
-
-		//Closes the menu
-		updateMenuState(menuButton);
-
-		//Resets the Exerscent logo
-		title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
-
-
-		//Returns the user to the waiting for scent screen
-		StartCoroutine(delayedUIState(1f, UIState.welcome));
 	}
-
 
 	//Exits the current sessions, bring the player back to selectGame state
 	public void exitSessionScript(){
 
-		//Hides the "Are you sure" question.
-		hideExit();
+		if(manager.gameRunning) {
+			//Hides the "Are you sure" question.
+			hideExit();
+			
+			//Clears all the current data and cards
+			manager.restart();
+
+			//Closes the menu
+			updateMenuState(menuButton);
+
+			//Resets the Exerscent logo
+			title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
+
+
+			//Returns the user to the waiting for scent screen
+			StartCoroutine(delayedUIState(1f, UIState.selectGame));			
+		}
 		
-		//Clears all the current data and cards
-		manager.restart();
-
-		//Closes the menu
-		updateMenuState(menuButton);
-
-		//Resets the Exerscent logo
-		title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
-
-
-		//Returns the user to the waiting for scent screen
-		StartCoroutine(delayedUIState(1f, UIState.selectGame));
-
-
 	}
 
 
@@ -681,6 +700,9 @@ public class UIManager : MonoBehaviour {
 		//Clears all the current data
 		manager.playAgain();
 		
+		//Close the Menu
+		updateMenuState(menuButton);
+
 		//Resets the Exerscent logo
 		title.GetComponentInChildren<Image>().DOFillAmount(0f ,1f).SetEase(Ease.OutSine);
 
