@@ -80,7 +80,7 @@ public class SerialCom : MonoBehaviour {
 
 						//Trim the strings to get rid of spaces
 						//scentType=scentType.Trim(); 
-						scentName=scentName.Trim(); 
+						//scentName=scentName.Trim(); 
 						gameManager.UIManager.consoleMessage("The following tag was scanned: " + scentName + ".");
 						
 						// //Send scent name to game manager LEGACY FUNCTION
@@ -91,11 +91,11 @@ public class SerialCom : MonoBehaviour {
 						//Debug.Log(gameManager.UIManager.currentState);
 						if(gameManager.UIManager.currentState == UIState.waitingForScent || gameManager.UIManager.currentState == UIState.welcome) {
 							gameManager.switchScent(scentName);
-							// Debug.Log("You scanned '" + scentName + "' to be used as the correct answer.");
+							Debug.Log("You scanned '" + scentName + "' to be used as the correct answer.");
 						}
 						
 
-						//print (scentType.ToLower()+" called "+scentName.ToLower()); //Print for bug testing
+						print(scentType.ToLower()+" called "+scentName.ToLower()); //Print for bug testing
 						
 
 						stream.BaseStream.Flush (); //Clear serial stream to assure we get new information

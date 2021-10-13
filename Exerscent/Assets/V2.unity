@@ -7870,6 +7870,11 @@ MonoBehaviour:
     name: Smoke
     cardColor: {r: 0.7607844, g: 0.7411765, b: 0.6117647, a: 1}
     scentPicture: {fileID: 0}
+  - scentSprite: {fileID: 21300000, guid: 61eb25de0e41de94abb4c357a1bdf79c, type: 3}
+    category: 2
+    name: Stinky Cheese
+    cardColor: {r: 0.7607844, g: 0.7411765, b: 0.6117647, a: 1}
+    scentPicture: {fileID: 0}
   scentTemplate: {fileID: 3486797209678752667, guid: 6191f5133811d4b45978975b46a40238,
     type: 3}
   selectedCard: {fileID: 0}
@@ -11488,7 +11493,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -82.70506, y: -413.52148}
+  m_AnchoredPosition: {x: -82.70508, y: -413.52148}
   m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1128089735
