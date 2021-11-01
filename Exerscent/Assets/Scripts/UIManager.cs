@@ -701,6 +701,7 @@ public class UIManager : MonoBehaviour {
 		manager.playAgain();
 		
 		//Close the Menu
+		menuOpen=true;
 		updateMenuState(menuButton);
 
 		//Resets the Exerscent logo

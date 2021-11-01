@@ -7595,11 +7595,6 @@ MonoBehaviour:
     name: Pear
     cardColor: {r: 0.8150355, g: 0.9716981, b: 0.62793696, a: 1}
     scentPicture: {fileID: 0}
-  - scentSprite: {fileID: 21300000, guid: b28aa118b36164225987cc1f6badcb4a, type: 3}
-    category: 0
-    name: Banana
-    cardColor: {r: 0.9716981, g: 0.9098211, b: 0.6004361, a: 1}
-    scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 85217cdc95318487490cdad48520ed54, type: 3}
     category: 1
     name: Pine
@@ -7684,11 +7679,6 @@ MonoBehaviour:
     category: 0
     name: Quince
     cardColor: {r: 0.9056604, g: 0.79166275, b: 0.15806337, a: 1}
-    scentPicture: {fileID: 0}
-  - scentSprite: {fileID: 21300000, guid: 60e2fc5742d3e4f63afd79f5702c7025, type: 3}
-    category: 0
-    name: Strawberry
-    cardColor: {r: 0.86666673, g: 0.19607845, b: 0.16470589, a: 1}
     scentPicture: {fileID: 0}
   - scentSprite: {fileID: 21300000, guid: 68e6372c4ea55466d99fbd8dfd47d07b, type: 3}
     category: 0
@@ -7938,6 +7928,7 @@ MonoBehaviour:
   screenScaled: {x: 0, y: 0}
   transitionSpeed: 0.5
   menuSpeed: 0.2
+  endScreen1: 0
   title: {fileID: 1090274486}
   menuButton: {fileID: 575887087}
   mainMenu: {fileID: 620089952}
