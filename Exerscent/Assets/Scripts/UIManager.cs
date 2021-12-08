@@ -268,7 +268,6 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public IEnumerator enterWait() {
-		consoleMessage("Login window activated");
 		Sequence enterSequence = DOTween.Sequence();
 		//loading bar progress
 		enterSequence.Append(title.GetComponentInChildren<Image>().DOFillAmount(1, 1f).SetEase(Ease.InSine));
