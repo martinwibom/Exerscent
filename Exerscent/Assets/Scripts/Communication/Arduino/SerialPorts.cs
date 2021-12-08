@@ -10,7 +10,7 @@ public class SerialPorts : MonoBehaviour {
 	public string[] ports;
 	string portName;
 	string wantedPortName="usbmodem";
-	string wantedPortNameWindows="COM";
+	string wantedPortNameWindows="COM3";
 	string fullPortName;
 	public bool portFound=false;
 	public UIManager UIManager;
